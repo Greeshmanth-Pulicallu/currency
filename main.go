@@ -42,6 +42,7 @@ func main() {
 	r.HandleFunc("/currencies", controller.DeleteCurrencyByIDHandler).Methods("DELETE")
 
 	r.HandleFunc("/exchange-rates", controller.CreateNewExchangeRateHandler).Methods("POST")
+	r.HandleFunc("/exchange-rates", controller.GetAllActiveExchangeRatesHandler).Methods("GET")
 
 	fmt.Println(r)
 	http.Handle("/", r)

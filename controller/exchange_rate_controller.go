@@ -31,3 +31,13 @@ func CreateNewExchangeRateHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 }
+
+func GetAllActiveExchangeRatesHandler(w http.ResponseWriter, r *http.Request) {
+	activeCurrencies, err := repository.GetAllActiveExchangesFromDB()
+	if err != nil {
+		http.Error(w, "Internal", http.StatusInternalServerError)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(activeCurrencies)
+}

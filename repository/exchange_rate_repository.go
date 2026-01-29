@@ -2,7 +2,7 @@ package repository
 
 import (
 	_ "errors"
-	_ "log"
+	"log"
 
 	"github.com/Greeshmanth-Pulicallu/currency/config"
 	"github.com/Greeshmanth-Pulicallu/currency/models"
@@ -22,4 +22,14 @@ func AddNewExchangeRateToDB(exchangeRate config.CreateNewExchangeRateReq) error 
 
 	return nil
 
+}
+
+func GetAllActiveExchangesFromDB() ([]models.ExchangeRate, error) {
+	var exchanges []models.ExchangeRate
+	if err := config.DB.Where("is_active = ?", true).Find(&exchanges).Error; err != nil {
+		log.Printf("Error GetAllActiveCurrenciesFromDB: %v\n", err)
+		return []models.ExchangeRate{}, err
+	}
+
+	return exchanges, nil
 }
