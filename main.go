@@ -3,9 +3,13 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/Greeshmanth-Pulicallu/currency/config"
+	"github.com/Greeshmanth-Pulicallu/currency/controller"
 	"github.com/Greeshmanth-Pulicallu/currency/models"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -29,4 +33,10 @@ func main() {
 			fmt.Printf("Column: %s, Type: %s, Nullable: \n", c.Name(), c.DatabaseTypeName())
 		}
 	}
+
+	r := mux.NewRouter()
+	r.HandleFunc("/", controller.LoginHandler)
+	fmt.Println(r)
+	http.Handle("/", r)
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
