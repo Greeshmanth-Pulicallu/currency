@@ -41,6 +41,8 @@ func main() {
 	r.HandleFunc("/currencies", controller.UpdateCurrencyByIDHandler).Methods("PUT")
 	r.HandleFunc("/currencies", controller.DeleteCurrencyByIDHandler).Methods("DELETE")
 
+	r.HandleFunc("/exchange-rates", controller.CreateNewExchangeRateHandler).Methods("POST")
+
 	fmt.Println(r)
 	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(":8080", r))
