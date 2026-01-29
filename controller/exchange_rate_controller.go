@@ -41,3 +41,16 @@ func GetAllActiveExchangeRatesHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(activeCurrencies)
 }
+
+func GetExchangeRatesByIDHandler(w http.ResponseWriter, r *http.Request, id string) {
+	fmt.Println("HIT")
+	currency, err := repository.GetExchangeRatesByIDFromDB(id)
+	if err != nil {
+		fmt.Printf("Error from GetCurrencyByIDHandler %v\n", err)
+		http.Error(w, "Id not found", http.StatusBadRequest)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(currency)
+
+}

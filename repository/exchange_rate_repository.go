@@ -33,3 +33,12 @@ func GetAllActiveExchangesFromDB() ([]models.ExchangeRate, error) {
 
 	return exchanges, nil
 }
+
+func GetExchangeRatesByIDFromDB(exchangeRateId string) (models.ExchangeRate, error) {
+	var currency models.ExchangeRate
+	if err := config.DB.Where("id = ?", exchangeRateId).First(&currency).Error; err != nil {
+		return models.ExchangeRate{}, err
+	}
+	return currency, nil
+
+}
