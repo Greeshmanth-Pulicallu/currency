@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"log"
 
 	"github.com/Greeshmanth-Pulicallu/currency/config"
@@ -38,4 +39,23 @@ func GetCurrencyByIDFromDB(currencyId string) (models.Currency, error) {
 		return models.Currency{}, nil
 	}
 	return currency, nil
+}
+
+func UpdateCurrencyByID(currencyId string, updateReq config.UpdateCurrencyReq) error {
+	result := config.DB.
+		Model(&models.Currency{}).
+		Where("id = ?", currencyId).
+		Updates(map[string]any{
+			"name":      updateReq.Name,
+			"symbol":    updateReq.Symbol,
+			"is_active": updateReq.IsActive,
+		})
+
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return errors.New("Id does not exist")
+	}
+	return nil
 }

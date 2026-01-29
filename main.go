@@ -38,6 +38,7 @@ func main() {
 	r.HandleFunc("/currencies", controller.CreateNewCurrencyHandler).Methods("POST")
 	r.HandleFunc("/currencies", controller.GetAllActiveCurrenciesHandler).Methods("GET")
 	r.HandleFunc("/currencies/{id}", controller.GetCurrencyByIDHandler).Methods("GET")
+	r.HandleFunc("/currencies", controller.UpdateCurrencyByIDHandler).Methods("PUT")
 
 	fmt.Println(r)
 	http.Handle("/", r)

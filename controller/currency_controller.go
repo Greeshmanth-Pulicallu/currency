@@ -60,3 +60,27 @@ func GetCurrencyByIDHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(currency)
 
 }
+
+func UpdateCurrencyByIDHandler(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		http.Error(w, "id is required", http.StatusBadRequest)
+		return
+	}
+
+	var updateCurrency config.UpdateCurrencyReq
+
+	if err := json.NewDecoder(r.Body).Decode(&updateCurrency); err != nil {
+		http.Error(w, "invalid request body", http.StatusBadRequest)
+		fmt.Println(err)
+		return
+	}
+
+	if err := repository.UpdateCurrencyByID(id, updateCurrency); err != nil {
+		fmt.Println(err)
+		http.Error(w, "Id does not exist", http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
