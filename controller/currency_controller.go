@@ -43,3 +43,20 @@ func GetAllActiveCurrenciesHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(activeCurrencies)
 }
+
+func GetCurrencyByIDHandler(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		http.Error(w, "id is required", http.StatusBadRequest)
+		return
+	}
+
+	currency, err := repository.GetCurrencyByIDFromDB(id)
+	if err != nil {
+		fmt.Printf("Error from GetCurrencyByIDHandler %v\n", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(currency)
+
+}

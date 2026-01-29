@@ -31,3 +31,11 @@ func GetAllActiveCurrenciesFromDB() ([]models.Currency, error) {
 
 	return currencies, nil
 }
+
+func GetCurrencyByIDFromDB(currencyId string) (models.Currency, error) {
+	var currency models.Currency
+	if err := config.DB.Where("id = ?", currencyId).First(&currency).Error; err != nil {
+		return models.Currency{}, nil
+	}
+	return currency, nil
+}
