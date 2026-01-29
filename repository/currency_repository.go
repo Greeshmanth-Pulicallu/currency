@@ -70,3 +70,12 @@ func DeleteCurrencyByID(currencyId string) error {
 
 	return result.Error
 }
+
+func GetCurrencyFromDB(code string) ([]models.Currency, error) {
+	var result []models.Currency
+	if err := config.DB.Where("code = ?", code).Find(&result).Error; err != nil {
+		log.Printf("Error GetCurrencyFromDB: %v\n", err)
+		return []models.Currency{}, err
+	}
+	return result, nil
+}

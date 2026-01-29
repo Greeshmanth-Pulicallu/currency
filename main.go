@@ -65,6 +65,8 @@ func main() {
 		controller.DeleteExchangeRatesByIDHandler(w, r, id)
 	}).Methods("DELETE")
 
+	r.HandleFunc("/convert", controller.ConvertCurrencyHandler).Methods("GET")
+
 	fmt.Println(r)
 	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(":8080", r))

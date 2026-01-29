@@ -25,3 +25,11 @@ type CreateNewExchangeRateReq struct {
 type UpdateExchangeRateReq struct {
 	Rate decimal.Decimal `json:"rate"`
 }
+
+type CurrencyConversionRes struct {
+	From            string          `json:"from"`
+	To              string          `json:"to"`
+	Amount          decimal.Decimal `json:"amount"`
+	ExchangeRate    decimal.Decimal `json:"exchange_rate"`
+	ConvertedAmount decimal.Decimal `json:"converted_amount"`
+}

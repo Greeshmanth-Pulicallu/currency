@@ -70,3 +70,13 @@ func DeleteExchangeRateByID(id string) error {
 
 	return result.Error
 }
+
+func GetExchangeRatesForPairFromDB(fromId, toId uint) models.ExchangeRate {
+	var exchangeRate models.ExchangeRate
+	if err := config.DB.Where("from_currency_id = ? AND to_currency_id = ?", fromId, toId).Find(&exchangeRate).Error; err != nil {
+		log.Printf("Error GetAllActiveCurrenciesFromDB: %v\n", err)
+		return models.ExchangeRate{}
+	}
+
+	return exchangeRate
+}
