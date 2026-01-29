@@ -27,6 +27,7 @@ func CreateNewCurrencyHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err := repository.AddNewCurrencyToDB(currency); err != nil {
 		http.Error(w, "Unable to add to db", http.StatusBadRequest)
+		return
 	}
 
 	w.WriteHeader(http.StatusCreated)

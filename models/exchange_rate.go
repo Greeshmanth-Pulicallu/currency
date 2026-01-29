@@ -7,12 +7,15 @@ import (
 
 type ExchangeRate struct {
 	gorm.Model
-	FromCurrencyID uint
+
+	FromCurrencyID uint     `gorm:"not null;uniqueIndex:idx_from_to"`
 	FromCurrency   Currency `gorm:"foreignKey:FromCurrencyID;references:ID"`
-	ToCurrencyId   uint
-	ToCurrency     Currency        `gorm:"foreignKey:ToCurrencyId;references:ID"`
-	Rate           decimal.Decimal `gorm:"type:numeric(18,6);not null"`
-	IsActive       bool            `gorm:"not null"`
+
+	ToCurrencyId uint     `gorm:"not null;uniqueIndex:idx_from_to"`
+	ToCurrency   Currency `gorm:"foreignKey:ToCurrencyID;references:ID"`
+
+	Rate     decimal.Decimal `gorm:"type:numeric(18,6);not null"`
+	IsActive bool            `gorm:"not null"`
 }
 
 func (ExchangeRate) TableName() string {

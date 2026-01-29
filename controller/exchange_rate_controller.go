@@ -24,7 +24,7 @@ func CreateNewExchangeRateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := repository.AddNewExchangeRateToDB(exchangeReq); err != nil {
-		http.Error(w, "Internal", http.StatusInternalServerError)
+		http.Error(w, "exchange rate already exists", http.StatusBadRequest)
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
@@ -36,6 +36,7 @@ func GetAllActiveExchangeRatesHandler(w http.ResponseWriter, r *http.Request) {
 	activeCurrencies, err := repository.GetAllActiveExchangesFromDB()
 	if err != nil {
 		http.Error(w, "Internal", http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
