@@ -59,3 +59,14 @@ func UpdateExchangeRateByID(exchangeRateId string, updateExchangeRateReq config.
 	}
 	return nil
 }
+
+func DeleteExchangeRateByID(id string) error {
+	result := config.DB.
+		Model(&models.ExchangeRate{}).
+		Where("id = ?", id).
+		Updates(map[string]any{
+			"is_active": false,
+		})
+
+	return result.Error
+}

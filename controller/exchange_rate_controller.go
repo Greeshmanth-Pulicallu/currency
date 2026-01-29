@@ -73,3 +73,14 @@ func UpdateExchangeRatesByIDHandler(w http.ResponseWriter, r *http.Request, id s
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode("OK")
 }
+
+func DeleteExchangeRatesByIDHandler(w http.ResponseWriter, r *http.Request, id string) {
+	if err := repository.DeleteExchangeRateByID(id); err != nil {
+		fmt.Printf("Error: %v\n", err)
+		http.Error(w, "id is required", http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode("OK")
+}

@@ -51,6 +51,10 @@ func main() {
 		id := mux.Vars(r)["id"]
 		controller.UpdateExchangeRatesByIDHandler(w, r, id)
 	}).Methods("PUT")
+	r.HandleFunc("/exchange-rates/{id}", func(w http.ResponseWriter, r *http.Request) {
+		id := mux.Vars(r)["id"]
+		controller.DeleteExchangeRatesByIDHandler(w, r, id)
+	}).Methods("DELETE")
 
 	fmt.Println(r)
 	http.Handle("/", r)
