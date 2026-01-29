@@ -54,3 +54,22 @@ func GetExchangeRatesByIDHandler(w http.ResponseWriter, r *http.Request, id stri
 	json.NewEncoder(w).Encode(currency)
 
 }
+
+func UpdateExchangeRatesByIDHandler(w http.ResponseWriter, r *http.Request, id string) {
+	var updateCurrency config.UpdateExchangeRateReq
+
+	if err := json.NewDecoder(r.Body).Decode(&updateCurrency); err != nil {
+		http.Error(w, "invalid request body", http.StatusBadRequest)
+		fmt.Println(err)
+		return
+	}
+
+	if err := repository.UpdateExchangeRateByID(id, updateCurrency); err != nil {
+		fmt.Println(err)
+		http.Error(w, "Id does not exist", http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode("OK")
+}

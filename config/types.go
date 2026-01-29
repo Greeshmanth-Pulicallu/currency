@@ -21,3 +21,7 @@ type CreateNewExchangeRateReq struct {
 	ToCurrencyID   uint            `json:"to_currency_id"`
 	Rate           decimal.Decimal `json:"rate"`
 }
+
+type UpdateExchangeRateReq struct {
+	Rate decimal.Decimal `json:"rate"`
+}

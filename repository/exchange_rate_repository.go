@@ -1,7 +1,7 @@
 package repository
 
 import (
-	_ "errors"
+	"errors"
 	"log"
 
 	"github.com/Greeshmanth-Pulicallu/currency/config"
@@ -41,4 +41,21 @@ func GetExchangeRatesByIDFromDB(exchangeRateId string) (models.ExchangeRate, err
 	}
 	return currency, nil
 
+}
+
+func UpdateExchangeRateByID(exchangeRateId string, updateExchangeRateReq config.UpdateExchangeRateReq) error {
+	result := config.DB.
+		Model(&models.ExchangeRate{}).
+		Where("id = ?", exchangeRateId).
+		Updates(map[string]any{
+			"rate": updateExchangeRateReq.Rate,
+		})
+
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return errors.New("Id does not exist")
+	}
+	return nil
 }

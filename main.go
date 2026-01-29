@@ -43,11 +43,14 @@ func main() {
 
 	r.HandleFunc("/exchange-rates", controller.CreateNewExchangeRateHandler).Methods("POST")
 	r.HandleFunc("/exchange-rates", controller.GetAllActiveExchangeRatesHandler).Methods("GET")
-	// r.HandleFunc("/exchange-rates/{id}", controller.GetExchangeRatesByIDHandler).Methods("GET")
 	r.HandleFunc("/exchange-rates/{id}", func(w http.ResponseWriter, r *http.Request) {
 		id := mux.Vars(r)["id"]
 		controller.GetExchangeRatesByIDHandler(w, r, id)
 	}).Methods("GET")
+	r.HandleFunc("/exchange-rates/{id}", func(w http.ResponseWriter, r *http.Request) {
+		id := mux.Vars(r)["id"]
+		controller.UpdateExchangeRatesByIDHandler(w, r, id)
+	}).Methods("PUT")
 
 	fmt.Println(r)
 	http.Handle("/", r)
