@@ -37,9 +37,18 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/currencies", controller.CreateNewCurrencyHandler).Methods("POST")
 	r.HandleFunc("/currencies", controller.GetAllActiveCurrenciesHandler).Methods("GET")
-	r.HandleFunc("/currencies/{id}", controller.GetCurrencyByIDHandler).Methods("GET")
-	r.HandleFunc("/currencies", controller.UpdateCurrencyByIDHandler).Methods("PUT")
-	r.HandleFunc("/currencies", controller.DeleteCurrencyByIDHandler).Methods("DELETE")
+	r.HandleFunc("currencies/{id}", func(w http.ResponseWriter, r *http.Request) {
+		id := mux.Vars(r)["id"]
+		controller.GetCurrencyByIDHandler(w, r, id)
+	}).Methods("GET")
+	r.HandleFunc("/currencies/{id}", func(w http.ResponseWriter, r *http.Request) {
+		id := mux.Vars(r)["id"]
+		controller.UpdateCurrencyByIDHandler(w, r, id)
+	}).Methods("PUT")
+	r.HandleFunc("/exchange-rates/{id}", func(w http.ResponseWriter, r *http.Request) {
+		id := mux.Vars(r)["id"]
+		controller.DeleteCurrencyByIDHandler(w, r, id)
+	}).Methods("DELETE")
 
 	r.HandleFunc("/exchange-rates", controller.CreateNewExchangeRateHandler).Methods("POST")
 	r.HandleFunc("/exchange-rates", controller.GetAllActiveExchangeRatesHandler).Methods("GET")

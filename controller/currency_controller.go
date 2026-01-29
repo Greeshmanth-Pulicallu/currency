@@ -44,13 +44,7 @@ func GetAllActiveCurrenciesHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(activeCurrencies)
 }
 
-func GetCurrencyByIDHandler(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
-	if id == "" {
-		http.Error(w, "id is required", http.StatusBadRequest)
-		return
-	}
-
+func GetCurrencyByIDHandler(w http.ResponseWriter, r *http.Request, id string) {
 	currency, err := repository.GetCurrencyByIDFromDB(id)
 	if err != nil {
 		fmt.Printf("Error from GetCurrencyByIDHandler %v\n", err)
@@ -61,13 +55,7 @@ func GetCurrencyByIDHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func UpdateCurrencyByIDHandler(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
-	if id == "" {
-		http.Error(w, "id is required", http.StatusBadRequest)
-		return
-	}
-
+func UpdateCurrencyByIDHandler(w http.ResponseWriter, r *http.Request, id string) {
 	var updateCurrency config.UpdateCurrencyReq
 
 	if err := json.NewDecoder(r.Body).Decode(&updateCurrency); err != nil {
@@ -86,13 +74,7 @@ func UpdateCurrencyByIDHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("OK")
 }
 
-func DeleteCurrencyByIDHandler(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
-	if id == "" {
-		http.Error(w, "id is required", http.StatusBadRequest)
-		return
-	}
-
+func DeleteCurrencyByIDHandler(w http.ResponseWriter, r *http.Request, id string) {
 	if err := repository.DeleteCurrencyByID(id); err != nil {
 		fmt.Printf("Error: %v\n", err)
 		http.Error(w, "id is required", http.StatusBadRequest)
