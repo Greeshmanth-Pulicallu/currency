@@ -59,3 +59,14 @@ func UpdateCurrencyByID(currencyId string, updateReq config.UpdateCurrencyReq) e
 	}
 	return nil
 }
+
+func DeleteCurrencyByID(currencyId string) error {
+	result := config.DB.
+		Model(&models.Currency{}).
+		Where("id = ?", currencyId).
+		Updates(map[string]any{
+			"is_active": false,
+		})
+
+	return result.Error
+}

@@ -83,4 +83,23 @@ func UpdateCurrencyByIDHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode("OK")
+}
+
+func DeleteCurrencyByIDHandler(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		http.Error(w, "id is required", http.StatusBadRequest)
+		return
+	}
+
+	if err := repository.DeleteCurrencyByID(id); err != nil {
+		fmt.Printf("Error: %v\n", err)
+		http.Error(w, "id is required", http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode("OK")
+
 }
