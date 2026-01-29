@@ -16,6 +16,5 @@ func main() {
 	config.DB.AutoMigrate(&models.Currency{})
 	config.DB.AutoMigrate(&models.ExchangeRate{})
 
-	http.Handle("/", router.R)
 	log.Fatal(http.ListenAndServe(":8080", router.R))
 }
