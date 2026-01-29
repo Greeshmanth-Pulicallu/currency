@@ -33,3 +33,13 @@ func CreateNewCurrencyHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(currency)
 
 }
+
+func GetAllActiveCurrenciesHandler(w http.ResponseWriter, r *http.Request) {
+	activeCurrencies, err := repository.GetAllActiveCurrenciesFromDB()
+	if err != nil {
+		http.Error(w, "Internal", http.StatusInternalServerError)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(activeCurrencies)
+}

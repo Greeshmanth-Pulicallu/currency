@@ -35,7 +35,8 @@ func main() {
 	}
 
 	r := mux.NewRouter()
-	r.HandleFunc("/", controller.CreateNewCurrencyHandler)
+	r.HandleFunc("/currencies", controller.CreateNewCurrencyHandler).Methods("POST")
+	r.HandleFunc("/currencies", controller.GetAllActiveCurrenciesHandler).Methods("GET")
 	fmt.Println(r)
 	http.Handle("/", r)
 	log.Fatal(http.ListenAndServe(":8080", r))
