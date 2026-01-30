@@ -32,16 +32,6 @@ func UserRegisterHandler(c *gin.Context) {
 		return
 	}
 
-	// user := models.Users{
-	// 	UserID: req.UserID,
-	// 	Hash:   string(hash),
-	// }
-	//
-	// if err := config.DB.Create(&user).Error; err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "user already exists"})
-	// 	return
-	// }
-
 	if err := repository.AddUserToDB(req.UserID, string(hash)); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user already exists"})
 		return
@@ -65,12 +55,6 @@ func UserLoginHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
 		return
 	}
-
-	// var user models.Users
-	// if err := config.DB.Where("user_id = ?", req.UserID).First(&user).Error; err != nil {
-	// 	c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
-	// 	return
-	// }
 
 	user, err := repository.VerifyUserExistsInDB(req.UserID)
 	if err != nil {
