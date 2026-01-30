@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/Greeshmanth-Pulicallu/currency/config"
-	"github.com/Greeshmanth-Pulicallu/currency/models"
+	"github.com/Greeshmanth-Pulicallu/currency/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
@@ -32,17 +32,22 @@ func UserRegisterHandler(c *gin.Context) {
 		return
 	}
 
-	user := models.Users{
-		UserID: req.UserID,
-		Hash:   string(hash),
-	}
+	// user := models.Users{
+	// 	UserID: req.UserID,
+	// 	Hash:   string(hash),
+	// }
+	//
+	// if err := config.DB.Create(&user).Error; err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "user already exists"})
+	// 	return
+	// }
 
-	if err := config.DB.Create(&user).Error; err != nil {
+	if err := repository.AddUserToDB(req.UserID, string(hash)); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "user already exists"})
 		return
 	}
 
-	token, err := config.GenerateJWT(user.UserID)
+	token, err := config.GenerateJWT(req.UserID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "token generation failed"})
 		return
@@ -61,8 +66,14 @@ func UserLoginHandler(c *gin.Context) {
 		return
 	}
 
-	var user models.Users
-	if err := config.DB.Where("user_id = ?", req.UserID).First(&user).Error; err != nil {
+	// var user models.Users
+	// if err := config.DB.Where("user_id = ?", req.UserID).First(&user).Error; err != nil {
+	// 	c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
+	// 	return
+	// }
+
+	user, err := repository.VerifyUserExistsInDB(req.UserID)
+	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
 		return
 	}
