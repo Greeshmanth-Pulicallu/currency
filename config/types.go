@@ -33,3 +33,13 @@ type CurrencyConversionRes struct {
 	ExchangeRate    decimal.Decimal `json:"exchange_rate"`
 	ConvertedAmount decimal.Decimal `json:"converted_amount"`
 }
+
+type RegisterReq struct {
+	UserID   string `json:"user_id"`
+	Password string `json:"password"`
+}
+
+type LoginReq struct {
+	UserID   string `json:"user_id"`
+	Password string `json:"password"`
+}

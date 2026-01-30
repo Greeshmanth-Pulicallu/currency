@@ -26,4 +26,8 @@ func init() {
 
 	// conversion
 	R.GET("/convert", controller.ConvertCurrencyHandler)
+
+	// auth
+	R.POST("/auth/register", controller.UserRegisterHandler)
+	R.POST("/auth/login", controller.UserLoginHandler)
 }
