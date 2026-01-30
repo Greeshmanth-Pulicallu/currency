@@ -8,9 +8,12 @@ import (
 
 	"github.com/Greeshmanth-Pulicallu/currency/config"
 	"github.com/Greeshmanth-Pulicallu/currency/repository"
+	"github.com/gin-gonic/gin"
 )
 
-func CreateNewCurrencyHandler(w http.ResponseWriter, r *http.Request) {
+func CreateNewCurrencyHandler(c *gin.Context) {
+	w := c.Writer
+	r := c.Request
 	var currency config.CreateNewCurrencyReq
 
 	if err := json.NewDecoder(r.Body).Decode(&currency); err != nil {
@@ -35,7 +38,9 @@ func CreateNewCurrencyHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func GetAllActiveCurrenciesHandler(w http.ResponseWriter, r *http.Request) {
+func GetAllActiveCurrenciesHandler(c *gin.Context) {
+	w := c.Writer
+	// r := c.Request
 	activeCurrencies, err := repository.GetAllActiveCurrenciesFromDB()
 	if err != nil {
 		http.Error(w, "Internal", http.StatusInternalServerError)
@@ -45,7 +50,10 @@ func GetAllActiveCurrenciesHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(activeCurrencies)
 }
 
-func GetCurrencyByIDHandler(w http.ResponseWriter, r *http.Request, id string) {
+func GetCurrencyByIDHandler(c *gin.Context) {
+	w := c.Writer
+	id := c.Param("id")
+
 	currency, err := repository.GetCurrencyByIDFromDB(id)
 	if err != nil {
 		fmt.Printf("Error from GetCurrencyByIDHandler %v\n", err)
@@ -56,7 +64,11 @@ func GetCurrencyByIDHandler(w http.ResponseWriter, r *http.Request, id string) {
 
 }
 
-func UpdateCurrencyByIDHandler(w http.ResponseWriter, r *http.Request, id string) {
+func UpdateCurrencyByIDHandler(c *gin.Context) {
+	w := c.Writer
+	r := c.Request
+	id := c.Param("id")
+
 	var updateCurrency config.UpdateCurrencyReq
 
 	if err := json.NewDecoder(r.Body).Decode(&updateCurrency); err != nil {
@@ -75,7 +87,10 @@ func UpdateCurrencyByIDHandler(w http.ResponseWriter, r *http.Request, id string
 	json.NewEncoder(w).Encode("OK")
 }
 
-func DeleteCurrencyByIDHandler(w http.ResponseWriter, r *http.Request, id string) {
+func DeleteCurrencyByIDHandler(c *gin.Context) {
+	w := c.Writer
+	id := c.Param("id")
+
 	if err := repository.DeleteCurrencyByID(id); err != nil {
 		fmt.Printf("Error: %v\n", err)
 		http.Error(w, "id is required", http.StatusBadRequest)
@@ -84,5 +99,4 @@ func DeleteCurrencyByIDHandler(w http.ResponseWriter, r *http.Request, id string
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode("OK")
-
 }

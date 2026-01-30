@@ -7,9 +7,13 @@ import (
 
 	"github.com/Greeshmanth-Pulicallu/currency/config"
 	"github.com/Greeshmanth-Pulicallu/currency/repository"
+	"github.com/gin-gonic/gin"
 )
 
-func CreateNewExchangeRateHandler(w http.ResponseWriter, r *http.Request) {
+func CreateNewExchangeRateHandler(c *gin.Context) {
+	w := c.Writer
+	r := c.Request
+
 	var exchangeReq config.CreateNewExchangeRateReq
 
 	if err := json.NewDecoder(r.Body).Decode(&exchangeReq); err != nil {
@@ -32,7 +36,9 @@ func CreateNewExchangeRateHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-func GetAllActiveExchangeRatesHandler(w http.ResponseWriter, r *http.Request) {
+func GetAllActiveExchangeRatesHandler(c *gin.Context) {
+	w := c.Writer
+
 	activeCurrencies, err := repository.GetAllActiveExchangesFromDB()
 	if err != nil {
 		http.Error(w, "Internal", http.StatusInternalServerError)
@@ -43,20 +49,26 @@ func GetAllActiveExchangeRatesHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(activeCurrencies)
 }
 
-func GetExchangeRatesByIDHandler(w http.ResponseWriter, r *http.Request, id string) {
-	fmt.Println("HIT")
+func GetExchangeRatesByIDHandler(c *gin.Context) {
+	w := c.Writer
+	id := c.Param("id")
+
 	currency, err := repository.GetExchangeRatesByIDFromDB(id)
 	if err != nil {
-		fmt.Printf("Error from GetCurrencyByIDHandler %v\n", err)
+		fmt.Printf("Error from GetExchangeRatesByIDHandler %v\n", err)
 		http.Error(w, "Id not found", http.StatusBadRequest)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(currency)
-
 }
 
-func UpdateExchangeRatesByIDHandler(w http.ResponseWriter, r *http.Request, id string) {
+func UpdateExchangeRatesByIDHandler(c *gin.Context) {
+	w := c.Writer
+	r := c.Request
+	id := c.Param("id")
+
 	var updateCurrency config.UpdateExchangeRateReq
 
 	if err := json.NewDecoder(r.Body).Decode(&updateCurrency); err != nil {
@@ -75,7 +87,10 @@ func UpdateExchangeRatesByIDHandler(w http.ResponseWriter, r *http.Request, id s
 	json.NewEncoder(w).Encode("OK")
 }
 
-func DeleteExchangeRatesByIDHandler(w http.ResponseWriter, r *http.Request, id string) {
+func DeleteExchangeRatesByIDHandler(c *gin.Context) {
+	w := c.Writer
+	id := c.Param("id")
+
 	if err := repository.DeleteExchangeRateByID(id); err != nil {
 		fmt.Printf("Error: %v\n", err)
 		http.Error(w, "id is required", http.StatusBadRequest)

@@ -1,45 +1,29 @@
 package router
 
 import (
-	"net/http"
-
 	"github.com/Greeshmanth-Pulicallu/currency/controller"
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
-var R *mux.Router
+var R *gin.Engine
 
 func init() {
-	R = mux.NewRouter()
-	R.HandleFunc("/currencies", controller.CreateNewCurrencyHandler).Methods("POST")
-	R.HandleFunc("/currencies", controller.GetAllActiveCurrenciesHandler).Methods("GET")
-	R.HandleFunc("currencies/{id}", func(w http.ResponseWriter, r *http.Request) {
-		id := mux.Vars(r)["id"]
-		controller.GetCurrencyByIDHandler(w, r, id)
-	}).Methods("GET")
-	R.HandleFunc("/currencies/{id}", func(w http.ResponseWriter, r *http.Request) {
-		id := mux.Vars(r)["id"]
-		controller.UpdateCurrencyByIDHandler(w, r, id)
-	}).Methods("PUT")
-	R.HandleFunc("/exchange-rates/{id}", func(w http.ResponseWriter, r *http.Request) {
-		id := mux.Vars(r)["id"]
-		controller.DeleteCurrencyByIDHandler(w, r, id)
-	}).Methods("DELETE")
+	R = gin.Default()
 
-	R.HandleFunc("/exchange-rates", controller.CreateNewExchangeRateHandler).Methods("POST")
-	R.HandleFunc("/exchange-rates", controller.GetAllActiveExchangeRatesHandler).Methods("GET")
-	R.HandleFunc("/exchange-rates/{id}", func(w http.ResponseWriter, r *http.Request) {
-		id := mux.Vars(r)["id"]
-		controller.GetExchangeRatesByIDHandler(w, r, id)
-	}).Methods("GET")
-	R.HandleFunc("/exchange-rates/{id}", func(w http.ResponseWriter, r *http.Request) {
-		id := mux.Vars(r)["id"]
-		controller.UpdateExchangeRatesByIDHandler(w, r, id)
-	}).Methods("PUT")
-	R.HandleFunc("/exchange-rates/{id}", func(w http.ResponseWriter, r *http.Request) {
-		id := mux.Vars(r)["id"]
-		controller.DeleteExchangeRatesByIDHandler(w, r, id)
-	}).Methods("DELETE")
+	// currencies
+	R.POST("/currencies", controller.CreateNewCurrencyHandler)
+	R.GET("/currencies", controller.GetAllActiveCurrenciesHandler)
+	R.GET("/currencies/:id", controller.GetCurrencyByIDHandler)
+	R.PUT("/currencies/:id", controller.UpdateCurrencyByIDHandler)
+	R.DELETE("/currencies/:id", controller.DeleteCurrencyByIDHandler)
 
-	R.HandleFunc("/convert", controller.ConvertCurrencyHandler).Methods("GET")
+	// exchange rates
+	R.POST("/exchange-rates", controller.CreateNewExchangeRateHandler)
+	R.GET("/exchange-rates", controller.GetAllActiveExchangeRatesHandler)
+	R.GET("/exchange-rates/:id", controller.GetExchangeRatesByIDHandler)
+	R.PUT("/exchange-rates/:id", controller.UpdateExchangeRatesByIDHandler)
+	R.DELETE("/exchange-rates/:id", controller.DeleteExchangeRatesByIDHandler)
+
+	// conversion
+	R.GET("/convert", controller.ConvertCurrencyHandler)
 }

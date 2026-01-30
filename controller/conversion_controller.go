@@ -5,14 +5,17 @@ import (
 	"net/http"
 
 	"github.com/Greeshmanth-Pulicallu/currency/service"
+	"github.com/gin-gonic/gin"
 )
 
-func ConvertCurrencyHandler(w http.ResponseWriter, r *http.Request) {
-	from := r.URL.Query().Get("from")
-	to := r.URL.Query().Get("to")
-	amount := r.URL.Query().Get("amount")
+func ConvertCurrencyHandler(c *gin.Context) {
+	w := c.Writer
 
-	if to == "" || from == "" || amount == "" {
+	from := c.Query("from")
+	to := c.Query("to")
+	amount := c.Query("amount")
+
+	if from == "" || to == "" || amount == "" {
 		http.Error(w, "Query params from to amount necessary", http.StatusBadRequest)
 		return
 	}
