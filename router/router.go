@@ -10,22 +10,25 @@ var R *gin.Engine
 func init() {
 	R = gin.Default()
 
+	protected := R.Group("/")
+	protected.Use(controller.JWTAuthMiddleware())
+
 	// currencies
-	R.POST("/currencies", controller.CreateNewCurrencyHandler)
-	R.GET("/currencies", controller.GetAllActiveCurrenciesHandler)
-	R.GET("/currencies/:id", controller.GetCurrencyByIDHandler)
-	R.PUT("/currencies/:id", controller.UpdateCurrencyByIDHandler)
-	R.DELETE("/currencies/:id", controller.DeleteCurrencyByIDHandler)
+	protected.POST("/currencies", controller.CreateNewCurrencyHandler)
+	protected.GET("/currencies", controller.GetAllActiveCurrenciesHandler)
+	protected.GET("/currencies/:id", controller.GetCurrencyByIDHandler)
+	protected.PUT("/currencies/:id", controller.UpdateCurrencyByIDHandler)
+	protected.DELETE("/currencies/:id", controller.DeleteCurrencyByIDHandler)
 
 	// exchange rates
-	R.POST("/exchange-rates", controller.CreateNewExchangeRateHandler)
-	R.GET("/exchange-rates", controller.GetAllActiveExchangeRatesHandler)
-	R.GET("/exchange-rates/:id", controller.GetExchangeRatesByIDHandler)
-	R.PUT("/exchange-rates/:id", controller.UpdateExchangeRatesByIDHandler)
-	R.DELETE("/exchange-rates/:id", controller.DeleteExchangeRatesByIDHandler)
+	protected.POST("/exchange-rates", controller.CreateNewExchangeRateHandler)
+	protected.GET("/exchange-rates", controller.GetAllActiveExchangeRatesHandler)
+	protected.GET("/exchange-rates/:id", controller.GetExchangeRatesByIDHandler)
+	protected.PUT("/exchange-rates/:id", controller.UpdateExchangeRatesByIDHandler)
+	protected.DELETE("/exchange-rates/:id", controller.DeleteExchangeRatesByIDHandler)
 
 	// conversion
-	R.GET("/convert", controller.ConvertCurrencyHandler)
+	protected.GET("/convert", controller.ConvertCurrencyHandler)
 
 	// auth
 	R.POST("/auth/register", controller.UserRegisterHandler)
