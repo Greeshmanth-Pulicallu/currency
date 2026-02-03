@@ -5,10 +5,11 @@ import (
 	"log"
 
 	"github.com/Greeshmanth-Pulicallu/currency/config"
+	"github.com/Greeshmanth-Pulicallu/currency/dto"
 	"github.com/Greeshmanth-Pulicallu/currency/models"
 )
 
-func AddNewExchangeRateToDB(exchangeRate config.CreateNewExchangeRateReq) error {
+func AddNewExchangeRateToDB(exchangeRate dto.CreateNewExchangeRateReq) error {
 	var newExchange models.ExchangeRate
 
 	newExchange.FromCurrencyID = exchangeRate.FromCurrencyID
@@ -43,7 +44,7 @@ func GetExchangeRatesByIDFromDB(exchangeRateId string) (models.ExchangeRate, err
 
 }
 
-func UpdateExchangeRateByID(exchangeRateId string, updateExchangeRateReq config.UpdateExchangeRateReq) error {
+func UpdateExchangeRateByID(exchangeRateId string, updateExchangeRateReq dto.UpdateExchangeRateReq) error {
 	result := config.DB.
 		Model(&models.ExchangeRate{}).
 		Where("id = ?", exchangeRateId).

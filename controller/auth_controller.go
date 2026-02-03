@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/Greeshmanth-Pulicallu/currency/config"
+	"github.com/Greeshmanth-Pulicallu/currency/dto"
 	"github.com/Greeshmanth-Pulicallu/currency/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -14,7 +15,7 @@ import (
 )
 
 func UserRegisterHandler(c *gin.Context) {
-	var req config.RegisterReq
+	var req dto.RegisterReq
 
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})
@@ -49,7 +50,7 @@ func UserRegisterHandler(c *gin.Context) {
 }
 
 func UserLoginHandler(c *gin.Context) {
-	var req config.LoginReq
+	var req dto.LoginReq
 
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request body"})

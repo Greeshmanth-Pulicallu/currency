@@ -3,13 +3,13 @@ package service
 import (
 	"errors"
 
-	"github.com/Greeshmanth-Pulicallu/currency/config"
+	"github.com/Greeshmanth-Pulicallu/currency/dto"
 	"github.com/Greeshmanth-Pulicallu/currency/repository"
 	"github.com/shopspring/decimal"
 )
 
-func ConvertCurrencyService(from, to, amount string) (config.CurrencyConversionRes, error) {
-	var response config.CurrencyConversionRes
+func ConvertCurrencyService(from, to, amount string) (dto.CurrencyConversionRes, error) {
+	var response dto.CurrencyConversionRes
 	fromQuery, err := repository.GetCurrencyFromDB(from)
 	if err != nil {
 		return response, err

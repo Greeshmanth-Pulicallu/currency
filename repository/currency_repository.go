@@ -5,10 +5,11 @@ import (
 	"log"
 
 	"github.com/Greeshmanth-Pulicallu/currency/config"
+	"github.com/Greeshmanth-Pulicallu/currency/dto"
 	"github.com/Greeshmanth-Pulicallu/currency/models"
 )
 
-func AddNewCurrencyToDB(currencyFromReq config.CreateNewCurrencyReq) error {
+func AddNewCurrencyToDB(currencyFromReq dto.CreateNewCurrencyReq) error {
 	var newCurrency models.Currency
 
 	newCurrency.Code = currencyFromReq.Code
@@ -41,7 +42,7 @@ func GetCurrencyByIDFromDB(currencyId string) (models.Currency, error) {
 	return currency, nil
 }
 
-func UpdateCurrencyByID(currencyId string, updateReq config.UpdateCurrencyReq) error {
+func UpdateCurrencyByID(currencyId string, updateReq dto.UpdateCurrencyReq) error {
 	result := config.DB.
 		Model(&models.Currency{}).
 		Where("id = ?", currencyId).

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Greeshmanth-Pulicallu/currency/config"
+	"github.com/Greeshmanth-Pulicallu/currency/dto"
 	"github.com/Greeshmanth-Pulicallu/currency/repository"
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +14,7 @@ import (
 func CreateNewCurrencyHandler(c *gin.Context) {
 	w := c.Writer
 	r := c.Request
-	var currency config.CreateNewCurrencyReq
+	var currency dto.CreateNewCurrencyReq
 
 	if err := json.NewDecoder(r.Body).Decode(&currency); err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
@@ -69,7 +69,7 @@ func UpdateCurrencyByIDHandler(c *gin.Context) {
 	r := c.Request
 	id := c.Param("id")
 
-	var updateCurrency config.UpdateCurrencyReq
+	var updateCurrency dto.UpdateCurrencyReq
 
 	if err := json.NewDecoder(r.Body).Decode(&updateCurrency); err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Greeshmanth-Pulicallu/currency/config"
+	"github.com/Greeshmanth-Pulicallu/currency/dto"
 	"github.com/Greeshmanth-Pulicallu/currency/repository"
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +14,7 @@ func CreateNewExchangeRateHandler(c *gin.Context) {
 	w := c.Writer
 	r := c.Request
 
-	var exchangeReq config.CreateNewExchangeRateReq
+	var exchangeReq dto.CreateNewExchangeRateReq
 
 	if err := json.NewDecoder(r.Body).Decode(&exchangeReq); err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
@@ -69,7 +69,7 @@ func UpdateExchangeRatesByIDHandler(c *gin.Context) {
 	r := c.Request
 	id := c.Param("id")
 
-	var updateCurrency config.UpdateExchangeRateReq
+	var updateCurrency dto.UpdateExchangeRateReq
 
 	if err := json.NewDecoder(r.Body).Decode(&updateCurrency); err != nil {
 		http.Error(w, "invalid request body", http.StatusBadRequest)
