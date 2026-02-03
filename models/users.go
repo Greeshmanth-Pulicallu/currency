@@ -3,9 +3,9 @@ package models
 import "gorm.io/gorm"
 
 type Users struct {
-	gorm.Model
-	UserID string `gorm:"type:varchar(255);not null;uniqueIndex"`
-	Hash   string `gorm:"type:varchar(255);not null"`
+	gorm.Model `json:"-"`
+	UserID     string `gorm:"type:varchar(255);not null;uniqueIndex"`
+	Hash       string `gorm:"type:varchar(255);not null"`
 }
 
 func (Users) TableName() string {

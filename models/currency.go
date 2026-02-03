@@ -3,11 +3,11 @@ package models
 import "gorm.io/gorm"
 
 type Currency struct {
-	gorm.Model
-	Code     string `gorm:"uniqueIndex;not null"`
-	Name     string `gorm:"not null"`
-	Symbol   string `gorm:"not null"`
-	IsActive bool   `gorm:"not null"`
+	gorm.Model `json:"-"`
+	Code       string `gorm:"uniqueIndex;not null" json:"code"`
+	Name       string `gorm:"not null" json:"name"`
+	Symbol     string `gorm:"not null" json:"symbol"`
+	IsActive   bool   `gorm:"not null" json:"is_active"`
 }
 
 func (Currency) TableName() string {
