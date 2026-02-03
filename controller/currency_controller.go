@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/Greeshmanth-Pulicallu/currency/dto"
-	"github.com/Greeshmanth-Pulicallu/currency/repository"
+	"github.com/Greeshmanth-Pulicallu/currency/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,7 +28,7 @@ func CreateNewCurrencyHandler(c *gin.Context) {
 		return
 	}
 
-	if err := repository.AddNewCurrencyToDB(currency); err != nil {
+	if err := service.CreateNewCurrencyService(currency); err != nil {
 		http.Error(w, "Unable to add to db, currency already exists", http.StatusBadRequest)
 		return
 	}
@@ -41,7 +41,7 @@ func CreateNewCurrencyHandler(c *gin.Context) {
 func GetAllActiveCurrenciesHandler(c *gin.Context) {
 	w := c.Writer
 	// r := c.Request
-	activeCurrencies, err := repository.GetAllActiveCurrenciesFromDB()
+	activeCurrencies, err := service.GetAllActiveCurrenciesFromDB()
 	if err != nil {
 		http.Error(w, "Internal", http.StatusInternalServerError)
 		return
@@ -55,7 +55,7 @@ func GetCurrencyByIDHandler(c *gin.Context) {
 	w := c.Writer
 	id := c.Param("id")
 
-	currency, err := repository.GetCurrencyByIDFromDB(id)
+	currency, err := service.GetCurrencyByIDFromDB(id)
 	if err != nil {
 		fmt.Printf("Error from GetCurrencyByIDHandler %v\n", err)
 		http.Error(w, "id does not exist", http.StatusBadRequest)
@@ -79,7 +79,7 @@ func UpdateCurrencyByIDHandler(c *gin.Context) {
 		return
 	}
 
-	if err := repository.UpdateCurrencyByID(id, updateCurrency); err != nil {
+	if err := service.UpdateCurrencyByID(id, updateCurrency); err != nil {
 		fmt.Println(err)
 		http.Error(w, "Id does not exist", http.StatusBadRequest)
 		return
@@ -93,7 +93,7 @@ func DeleteCurrencyByIDHandler(c *gin.Context) {
 	w := c.Writer
 	id := c.Param("id")
 
-	if err := repository.DeleteCurrencyByID(id); err != nil {
+	if err := service.DeleteCurrencyByID(id); err != nil {
 		fmt.Printf("Error: %v\n", err)
 		http.Error(w, "valid id is required", http.StatusBadRequest)
 		return

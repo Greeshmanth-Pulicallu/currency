@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/Greeshmanth-Pulicallu/currency/dto"
-	"github.com/Greeshmanth-Pulicallu/currency/repository"
+	"github.com/Greeshmanth-Pulicallu/currency/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,7 +27,7 @@ func CreateNewExchangeRateHandler(c *gin.Context) {
 		return
 	}
 
-	if err := repository.AddNewExchangeRateToDB(exchangeReq); err != nil {
+	if err := service.AddNewExchangeRateToDB(exchangeReq); err != nil {
 		http.Error(w, "exchange rate already exists", http.StatusBadRequest)
 		fmt.Printf("Error: %v\n", err)
 		return
@@ -39,7 +39,7 @@ func CreateNewExchangeRateHandler(c *gin.Context) {
 func GetAllActiveExchangeRatesHandler(c *gin.Context) {
 	w := c.Writer
 
-	activeCurrencies, err := repository.GetAllActiveExchangesFromDB()
+	activeCurrencies, err := service.GetAllActiveExchangesFromDB()
 	if err != nil {
 		http.Error(w, "Internal", http.StatusInternalServerError)
 		return
@@ -53,7 +53,7 @@ func GetExchangeRatesByIDHandler(c *gin.Context) {
 	w := c.Writer
 	id := c.Param("id")
 
-	currency, err := repository.GetExchangeRatesByIDFromDB(id)
+	currency, err := service.GetExchangeRatesByIDFromDB(id)
 	if err != nil {
 		fmt.Printf("Error from GetExchangeRatesByIDHandler %v\n", err)
 		http.Error(w, "Id not found", http.StatusBadRequest)
@@ -77,7 +77,7 @@ func UpdateExchangeRatesByIDHandler(c *gin.Context) {
 		return
 	}
 
-	if err := repository.UpdateExchangeRateByID(id, updateCurrency); err != nil {
+	if err := service.UpdateExchangeRateByID(id, updateCurrency); err != nil {
 		fmt.Println(err)
 		http.Error(w, "Id does not exist", http.StatusBadRequest)
 		return
@@ -91,7 +91,7 @@ func DeleteExchangeRatesByIDHandler(c *gin.Context) {
 	w := c.Writer
 	id := c.Param("id")
 
-	if err := repository.DeleteExchangeRateByID(id); err != nil {
+	if err := service.DeleteExchangeRateByID(id); err != nil {
 		fmt.Printf("Error: %v\n", err)
 		http.Error(w, "id is required", http.StatusBadRequest)
 		return
