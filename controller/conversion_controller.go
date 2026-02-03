@@ -22,7 +22,7 @@ func ConvertCurrencyHandler(c *gin.Context) {
 
 	response, err := service.ConvertCurrencyService(from, to, amount)
 	if err != nil {
-		http.Error(w, "invalid params", http.StatusBadRequest)
+		http.Error(w, "valid ids and non zero amount is required", http.StatusBadRequest)
 		return
 	}
 

@@ -29,7 +29,7 @@ func CreateNewCurrencyHandler(c *gin.Context) {
 	}
 
 	if err := repository.AddNewCurrencyToDB(currency); err != nil {
-		http.Error(w, "Unable to add to db", http.StatusBadRequest)
+		http.Error(w, "Unable to add to db, currency already exists", http.StatusBadRequest)
 		return
 	}
 
@@ -44,6 +44,7 @@ func GetAllActiveCurrenciesHandler(c *gin.Context) {
 	activeCurrencies, err := repository.GetAllActiveCurrenciesFromDB()
 	if err != nil {
 		http.Error(w, "Internal", http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -57,11 +58,12 @@ func GetCurrencyByIDHandler(c *gin.Context) {
 	currency, err := repository.GetCurrencyByIDFromDB(id)
 	if err != nil {
 		fmt.Printf("Error from GetCurrencyByIDHandler %v\n", err)
+		http.Error(w, "id does not exist", http.StatusBadRequest)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(currency)
-
 }
 
 func UpdateCurrencyByIDHandler(c *gin.Context) {
@@ -93,7 +95,7 @@ func DeleteCurrencyByIDHandler(c *gin.Context) {
 
 	if err := repository.DeleteCurrencyByID(id); err != nil {
 		fmt.Printf("Error: %v\n", err)
-		http.Error(w, "id is required", http.StatusBadRequest)
+		http.Error(w, "valid id is required", http.StatusBadRequest)
 		return
 	}
 
