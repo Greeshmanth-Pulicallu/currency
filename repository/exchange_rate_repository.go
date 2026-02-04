@@ -27,7 +27,7 @@ func AddNewExchangeRateToDB(exchangeRate dto.CreateNewExchangeRateReq) error {
 
 func GetAllActiveExchangesFromDB() ([]models.ExchangeRate, error) {
 	var exchanges []models.ExchangeRate
-	if err := config.DB.Where("is_active = ?", true).Find(&exchanges).Error; err != nil {
+	if err := config.DB.Where("is_active = ?", true).Preload("FromCurrency").Preload("ToCurrency").Find(&exchanges).Error; err != nil {
 		log.Printf("Error GetAllActiveCurrenciesFromDB: %v\n", err)
 		return []models.ExchangeRate{}, err
 	}
@@ -74,10 +74,28 @@ func DeleteExchangeRateByID(id string) error {
 
 func GetExchangeRatesForPairFromDB(fromId, toId uint) models.ExchangeRate {
 	var exchangeRate models.ExchangeRate
-	if err := config.DB.Where("from_currency_id = ? AND to_currency_id = ?", fromId, toId).Find(&exchangeRate).Error; err != nil {
-		log.Printf("Error GetAllActiveCurrenciesFromDB: %v\n", err)
+	err := config.DB.
+		Joins(`
+		JOIN app_currencies fc
+		ON fc.id = app_exchange_rates.from_currency_id
+		AND fc.is_active = true
+	`).
+		Joins(`
+		JOIN app_currencies tc
+		ON tc.id = app_exchange_rates.to_currency_id
+		AND tc.is_active = true
+	`).
+		Where(
+			"app_exchange_rates.from_currency_id = ? AND app_exchange_rates.to_currency_id = ? AND app_exchange_rates.is_active = ?",
+			fromId, toId, true,
+		).
+		Preload("FromCurrency").
+		Preload("ToCurrency").
+		First(&exchangeRate).Error
+
+	if err != nil {
+		log.Printf("Error GetExchangeRateFromDB: %v\n", err)
 		return models.ExchangeRate{}
 	}
-
 	return exchangeRate
 }
