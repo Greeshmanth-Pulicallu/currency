@@ -7,22 +7,32 @@ import (
 	"github.com/Greeshmanth-Pulicallu/currency/config"
 	"github.com/Greeshmanth-Pulicallu/currency/dto"
 	"github.com/Greeshmanth-Pulicallu/currency/models"
+	"gorm.io/gorm/clause"
 )
 
+const ExchngeRateURL = "https://v6.exchangerate-api.com/v6/8759116ef8e1f7321d5eba63/latest/"
+
 func AddNewExchangeRateToDB(exchangeRate dto.CreateNewExchangeRateReq) error {
-	var newExchange models.ExchangeRate
-
-	newExchange.FromCurrencyID = exchangeRate.FromCurrencyID
-	newExchange.ToCurrencyId = exchangeRate.ToCurrencyID
-	newExchange.Rate = exchangeRate.Rate
-	newExchange.IsActive = true
-
-	if err := config.DB.Create(&newExchange).Error; err != nil {
-		return err
+	newExchange := models.ExchangeRate{
+		FromCurrencyID: exchangeRate.FromCurrencyID,
+		ToCurrencyId:   exchangeRate.ToCurrencyID,
+		Rate:           exchangeRate.Rate,
+		IsActive:       true,
 	}
 
-	return nil
-
+	return config.DB.
+		Clauses(clause.OnConflict{
+			Columns: []clause.Column{
+				{Name: "from_currency_id"},
+				{Name: "to_currency_id"},
+			},
+			DoUpdates: clause.AssignmentColumns([]string{
+				"rate",
+				"is_active",
+				"updated_at",
+			}),
+		}).
+		Create(&newExchange).Error
 }
 
 func GetAllActiveExchangesFromDB() ([]models.ExchangeRate, error) {

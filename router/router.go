@@ -26,6 +26,7 @@ func init() {
 	protected.GET("/exchange-rates/:id", controller.GetExchangeRatesByIDHandler)
 	protected.PUT("/exchange-rates/:id", controller.UpdateExchangeRatesByIDHandler)
 	protected.DELETE("/exchange-rates/:id", controller.DeleteExchangeRatesByIDHandler)
+	protected.GET("/exchange-rates/fetch-latest-rates/:base_code", controller.FetchExchangeRatesFromExternalAPI)
 
 	// conversion
 	protected.GET("/convert", controller.ConvertCurrencyHandler)

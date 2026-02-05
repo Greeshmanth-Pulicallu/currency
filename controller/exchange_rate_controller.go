@@ -10,6 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const ExchngeRateURL = "https://v6.exchangerate-api.com/v6/%v/latest/%v"
+
 func CreateNewExchangeRateHandler(c *gin.Context) {
 	w := c.Writer
 	r := c.Request
@@ -34,6 +36,8 @@ func CreateNewExchangeRateHandler(c *gin.Context) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode("created")
+
 }
 
 func GetAllActiveExchangeRatesHandler(c *gin.Context) {
@@ -88,6 +92,7 @@ func UpdateExchangeRatesByIDHandler(c *gin.Context) {
 }
 
 func DeleteExchangeRatesByIDHandler(c *gin.Context) {
+
 	w := c.Writer
 	id := c.Param("id")
 
@@ -99,4 +104,19 @@ func DeleteExchangeRatesByIDHandler(c *gin.Context) {
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode("OK")
+}
+
+func FetchExchangeRatesFromExternalAPI(c *gin.Context) {
+	baseCode := c.Param("base_code")
+	w := c.Writer
+
+	err := service.FetchExchangeExchangeRatesFromExternalAPIService(baseCode)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("%v", err), http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode("Created")
+
 }
