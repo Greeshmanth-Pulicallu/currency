@@ -46,11 +46,7 @@ func UpdateCurrencyByID(currencyId string, updateReq dto.UpdateCurrencyReq) erro
 	result := config.DB.
 		Model(&models.Currency{}).
 		Where("id = ?", currencyId).
-		Updates(map[string]any{
-			"name":      updateReq.Name,
-			"symbol":    updateReq.Symbol,
-			"is_active": updateReq.IsActive,
-		})
+		Updates(updateReq)
 
 	if result.Error != nil {
 		return result.Error

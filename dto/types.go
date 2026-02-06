@@ -11,9 +11,9 @@ type CreateNewCurrencyReq struct {
 }
 
 type UpdateCurrencyReq struct {
-	Name     string `json:"name"`
-	Symbol   string `json:"symbol"`
-	IsActive bool   `json:"is_active"`
+	Name     *string `json:"name"`
+	Symbol   *string `json:"symbol"`
+	IsActive *bool   `json:"is_active"`
 }
 
 type CreateNewExchangeRateReq struct {
